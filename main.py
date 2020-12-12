@@ -11,18 +11,14 @@ def create():     #FUNCTION FOR CREATING AND INSERTING NEW KEY VALUE PAIR
   size = os.path.getsize(path)
   if (len(k) > 32):     #TO CHECK IF THE KEY VALUE IS CAPPED WITHIN 32 CHARACTERS
     print("SIZE OF KEY MUST BE WITHIN 32 CHARACTERS")
-  elif (size > 1073741824):      #TO CHECK IF THE SIZE OF THE FILE IF WITHIN 1GB
+  elif (size > 1073741824):      #TO CHECK IF THE SIZE OF THE FILE IS WITHIN 1GB
     print("SIZE OF THE FILE IS GREATER THAN 1GB")
   else:
-    #with open('datastore.txt') as f:    #CONVERTING JSON OBJECT TO DICTIONARY
-     # data = json.load(f)
-
     if k in person_dict:     #TO CHECK IF KEY ENTERED IS ALREADY PRESENT OR NOT
-      oldtime = 0
       oldtime = dict_time[k]
       if(oldtime+60<time.time()):      #IF THE KEY IS PRESENT CHECK IF TIME_TO_LIVE NOT EXCEEDED
         print("PLEASE ENTER VALUE")
-        value=int(input())      #IF TIME-TO-LIVE EXCEEDED GET NEW VALUEAS INPUT AND UPDATE THE VALUE
+        value=input()      #IF TIME-TO-LIVE EXCEEDED GET NEW VALUEAS INPUT AND UPDATE THE VALUE
         person_dict[k]=value
         with open('datastore.txt', 'w') as json_file:
           json.dump(person_dict, json_file)
@@ -42,10 +38,7 @@ def create():     #FUNCTION FOR CREATING AND INSERTING NEW KEY VALUE PAIR
 def read():   #FUNCTION FOR READING THE VALUE OF A GIVEN KEY
   print("PLEASE ENTER KEY")
   k = input()
-  with open('datastore.txt') as f:
-    data = json.load(f)
-  if k in data:   #TO CKECK IF KEY IS PRESENT
-    oldtime=0
+  if k in person_dict:   #TO CKECK IF KEY IS PRESENT
     oldtime=dict_time[k]
     if (oldtime + 60 >time.time()):   #TO CKECK IF THE TIME-TO-LIVE HAS NOT EXPIRED
       print(person_dict[k])
@@ -57,9 +50,7 @@ def read():   #FUNCTION FOR READING THE VALUE OF A GIVEN KEY
 def delete():   #FUNCTION TO DELETE A KEY-VALUE PAIR
   print("PLEASE ENTER KEY")
   k = input()
-  with open('datastore.txt') as f:
-    data = json.load(f)
-  if k in data:   #TO CHECK IF THE KEY IS PRESENT IN THE DICTIONARY
+  if k in person_dict:   #TO CHECK IF THE KEY IS PRESENT IN THE DICTIONARY
     oldtime = dict_time[k]
     if (oldtime + 60 <time.time()):   #TO CHECK IF THE TIME-TO-LIVE HAS NOT EXPIRED
       print("THE TIME-TO-LIVE OF THE KEY IS EXPIRED")
@@ -80,9 +71,6 @@ while(True):
   print("For delete press d")
   print("For exit press e")
   print("For multithreading press m")
-
-  with open('datastore.txt', 'w') as json_file:
-    json.dump(person_dict, json_file)
   inp=input()
   if(inp!="c" and inp!="r" and inp!="d" and inp!="e" and inp!="m"):
     print("PLEASE PRESS  C OR R OR D OR M")
